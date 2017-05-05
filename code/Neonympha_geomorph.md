@@ -1,14 +1,5 @@
----
-title: "*Neonympha* geometric morphometrics"
-date: "`r format(Sys.Date())`"
-output: 
-        html_document:
-          keep_md: TRUE
-          toc: TRUE
-          toc_float: TRUE
-          toc_depth: 3
-          theme: readable
----
+# *Neonympha* geometric morphometrics
+`r format(Sys.Date())`  
 
 Hamm *et al.* (in prep)
 
@@ -32,15 +23,14 @@ About this project: This code describes the morphometric analyses of taxa within
 - *N. mithcellii francisci* (St. Francis' satyr)
 
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
-```
+
 
 
 # Preliminaries
 
 ## Load packages
-```{r preliminaries, message = FALSE}
+
+```r
 set.seed(8762432)
 library("geomorph")
 library("tidyverse")
@@ -61,9 +51,14 @@ We will be working with three data sets:
 We want to conduct our analyses on the same individuals throughout the study. After loading all data sets we will filter the to retain only individuals that are present in all the data sets. 
 
 ### `Pattern` raw data
-```{r Pattern_raw, message = FALSE}
+
+```r
 Pattern_raw <- read.csv("../data/Pattern_raw.csv", header = TRUE) 
 dim(Pattern_raw)
+```
+
+```
+## [1] 221  53
 ```
 
 For the `pattern` data set, we placed 26 Type 1 landmarks on the ventral hindwing where elements of the Central Symmetry System (CSS) intersect with wing veins. We landmarked a total of 221 individual male *Neonympha* butterflies.
@@ -78,17 +73,27 @@ This data frame contains a lot of information, some we need and some we don't:
 - Column 2:53 - The unaligned landmarks for `pattern` data. Column headers in the `pattern` data set start with `pRawCoord`. There are 26 landmarks with X & Y coordinates. Landmarks were placed using the program `tpsDig`. 
 
 ### `Structure` raw data
-```{r Structure_raw, message = FALSE}
+
+```r
 Structure_raw <- read.csv("../data/Structure_raw.csv", header = TRUE)
 dim(Structure_raw)
+```
+
+```
+## [1] 215  31
 ```
 
 For the `structure` data set we placedn 15 Type 1 landmarks on the ventral hind wing where there were vein-vein intersections and where a vein terminate at the wing margin. Column headers in the `structure` data set start with `sRawCoord`. We landmarked a total of 215 male *Neonympha* butterflies. 
 
 ### `Covariate` data
-```{r Covariate_data, message = FALSE}
+
+```r
 Covariate_data <- read.csv("../data/BO0_12_Dec.csv", header = TRUE)
 dim(Covariate_data) 
+```
+
+```
+## [1] 323  21
 ```
 
 We took measurements from 323 male *Neonympha* butterflies for the area, length, and width of any border ocellus. If we want to describe border ocellus information for the geuns *Neonympha* we can use all the data, but if we want to consider how these data interact with any of the morphometric data we acquired we will need to used the `Combined_data` object we create below. 
@@ -110,12 +115,23 @@ The data in this object are:
 
 The key (a unique variable used to connect tables) for all our data sets is `Id`. This will by the `by = ` in our joins.
 
-```{r Combined_data}
+
+```r
 Landmark_data <- merge(x = Pattern_raw, y = Structure_raw, by = "Id")
 dim(Landmark_data)
+```
 
+```
+## [1] 210  83
+```
+
+```r
 Combined_data <- merge(x = Landmark_data, y = Covariate_data, by = "Id")
 dim(Combined_data)
+```
+
+```
+## [1] 208 103
 ```
 
 
@@ -125,7 +141,8 @@ dim(Combined_data)
 
 We will now conduct our Procrustes fit using the `geomorph` package. First we need to create an array and then conduct our fit. 
 
-```{r Pattern_array, message = FALSE}
+
+```r
 Pattern_array <- arrayspecs(Combined_data[, 2:53], p = 26, k = 2)
 
 Pattern_gpa <- gpagen(Pattern_array, PrinAxes = FALSE, Proj = TRUE, ProcD = TRUE, print.progress = FALSE)
@@ -137,7 +154,8 @@ rownames(Pattern_2d) <- Combined_data$Taxon
 
 ### `Structure` data
 
-```{r Structure_array, message = FALSE}
+
+```r
 Structure_array <- arrayspecs(Combined_data[, 54:83], p = 15, k = 2)
 
 Structure_gpa <- gpagen(Structure_array, PrinAxes = FALSE, Proj = TRUE, ProcD = TRUE, print.progress = FALSE)
@@ -151,19 +169,70 @@ rownames(Structure_2d) <- Combined_data$Taxon
 
 We import the phylogenetic tree. Because this is such a small tree it isn't really possible to test values of $\lambda$ (the smooting parameter) to use penalized likelihood (Sanerson 2002). So we will force it to be an ultrametric tree. 
 
-```{r Phylogenetic_data, message = FALSE}
+
+```r
 Neonympha_phylogeny <- read.nexus("../data/MSB_tree2.tre")
 is.ultrametric(Neonympha_phylogeny)
+```
 
+```
+## [1] FALSE
+```
+
+```r
 Neonympha_ultrametric_1 <- chronopl(Neonympha_phylogeny, lambda = 1, iter.max = 1e4, CV = TRUE) # Lambda of 1 implies highly variable rates among lineages
+```
 
+```
+## Doing cross-validation
+## 
+  dropping tip 1 / 4
+  dropping tip 2 / 4
+  dropping tip 3 / 4
+  dropping tip 4 / 4
+```
+
+```r
 plot(Neonympha_ultrametric_1)
+```
+
+<img src="Neonympha_geomorph_files/figure-html/Phylogenetic_data-1.png" style="display: block; margin: auto;" />
+
+```r
 is.ultrametric(Neonympha_ultrametric_1)
+```
+
+```
+## [1] TRUE
+```
+
+```r
 Neonympha_ultrametric_1$edge_length <- c(0.4, 0.6, 0.1, 0.15, 0.001, 0.6, 1) # Manually add edge lengths from Hamm et al. 2014.
 
 Neonympha_ultrametric_0 <- chronopl(Neonympha_phylogeny, lambda = 0, age.min = 1, age.max = NULL, tol = 1e-8, eval.max = 1000, iter.max = 1e4, CV = TRUE)
+```
+
+```
+## Doing cross-validation
+## 
+  dropping tip 1 / 4
+  dropping tip 2 / 4
+  dropping tip 3 / 4
+  dropping tip 4 / 4
+```
+
+```r
 plot(Neonympha_ultrametric_0)
+```
+
+<img src="Neonympha_geomorph_files/figure-html/Phylogenetic_data-2.png" style="display: block; margin: auto;" />
+
+```r
 is.ultrametric(Neonympha_ultrametric_0)
+```
+
+```
+## [1] TRUE
 ```
 
 Import the species level phylogeny from Hamm et *al.* 2013. 
@@ -177,7 +246,8 @@ Import the species level phylogeny from Hamm et *al.* 2013.
 
 A plot of all superimposed landmarks and the mean landmark for each species.
 
-```{r Pattern_visualization}
+
+```r
 N_ar_p_mean <- colMeans(Pattern_2d[Combined_data$Taxon == "N.ar", ])
 N_he_p_mean <- colMeans(Pattern_2d[Combined_data$Taxon == "N.he", ])
 N_fr_p_mean <- colMeans(Pattern_2d[Combined_data$Taxon == "N.fr", ])
@@ -193,12 +263,15 @@ plot(colMeans(Pattern_2d[c(seq(1, 51, 2)), ]), colMeans(Pattern_2d[c(seq(2, 52, 
   legend('bottomleft', legend = c('Individual landmarks','Grand mean', expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), col = c('grey','black', SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pch = 19, bty = 'n')
 ```
 
+<img src="Neonympha_geomorph_files/figure-html/Pattern_visualization-1.png" style="display: block; margin: auto;" />
+
 
 ## `Structure` data
 
 A plot of all superimposed landmarks and the mean landmark for each species.
 
-```{r Structure_visualization}
+
+```r
 N_ar_s_mean <- colMeans(Structure_2d[Combined_data$Taxon == "N.ar", ])
 N_he_s_mean <- colMeans(Structure_2d[Combined_data$Taxon == "N.he", ])
 N_fr_s_mean <- colMeans(Structure_2d[Combined_data$Taxon == "N.fr", ])
@@ -214,6 +287,8 @@ plot(colMeans(Structure_2d[c(seq(1, 29, 2)), ]), colMeans(Structure_2d[c(seq(2, 
   legend('topleft', legend = c('Individual landmarks','Grand mean', expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), col = c('grey','black', SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pch = 19, bty = 'n')
 ```
 
+<img src="Neonympha_geomorph_files/figure-html/Structure_visualization-1.png" style="display: block; margin: auto;" />
+
 
 
 # Analyses
@@ -223,11 +298,21 @@ plot(colMeans(Structure_2d[c(seq(1, 29, 2)), ]), colMeans(Structure_2d[c(seq(2, 
 
 ### `Pattern`
 
-```{r Pattern_lda, warning = FALSE}
+
+```r
 # The first step is to conduct a Principle Componants Analysis (PCA)
 Pattern_pca <- prcomp(Pattern_2d)
 summary(Pattern_pca)$importance[, 1:4]
+```
 
+```
+##                               PC1        PC2        PC3        PC4
+## Standard deviation     0.04193424 0.02885562 0.02288956 0.01954378
+## Proportion of Variance 0.33585000 0.15903000 0.10007000 0.07295000
+## Cumulative Proportion  0.33585000 0.49488000 0.59494000 0.66790000
+```
+
+```r
 # Recall that the last four PC dimensions (49:52 in this case) are empty when dealing with morphometric data - we remove these to avoid deficient dimensions
 
 Pattern_pca_shape <- cbind(Combined_data[, c(1, 84)], Pattern_pca$x[, 1:48])
@@ -241,12 +326,24 @@ plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW
   legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 ```
 
+<img src="Neonympha_geomorph_files/figure-html/Pattern_lda-1.png" style="display: block; margin: auto;" />
+
 ### `Structure` 
 
-```{r Structure_lda, warning = FALSE}
+
+```r
 Structure_pca <- prcomp(Structure_2d)
 summary(Structure_pca)$importance[, 1:4]
+```
 
+```
+##                               PC1        PC2        PC3       PC4
+## Standard deviation     0.03460441 0.03000025 0.02357017 0.0203136
+## Proportion of Variance 0.26562000 0.19964000 0.12323000 0.0915300
+## Cumulative Proportion  0.26562000 0.46527000 0.58850000 0.6800300
+```
+
+```r
 Structure_pca_shape <- cbind(Combined_data[, c(1, 84)], Structure_pca$x[, 1:26])
 
 Structure_lda <- lda(as.matrix(Structure_pca_shape[, 3:28]), Structure_pca_shape$Taxon, method ="mle" )
@@ -258,15 +355,27 @@ plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2, col = c(SW_palette("Main")[1]
   legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 ```
 
+<img src="Neonympha_geomorph_files/figure-html/Structure_lda-1.png" style="display: block; margin: auto;" />
+
 ### Border ocelli
 
-```{r BO_lda, warning = FALSE}
+
+```r
 # Not all individuals have border ocelli in cells 1 and 2, so we will omit those from this analysis. We will select the area, lenght and width of border ocelli from cells 3:6.
 
 Cov_ALW <- Combined_data[, c(87:90, 95:102)]
 Cov_ALW_pca <- prcomp(Cov_ALW)
 summary(Cov_ALW_pca)$importance[, 1:4]
+```
 
+```
+##                             PC1       PC2       PC3       PC4
+## Standard deviation     1.218382 0.7383672 0.3681858 0.3300342
+## Proportion of Variance 0.613290 0.2252400 0.0560100 0.0450000
+## Cumulative Proportion  0.613290 0.8385400 0.8945400 0.9395400
+```
+
+```r
 Cov_ALW_shape <- cbind(Combined_data[, c(1, 84)], Cov_ALW_pca$x) # These data are not morphometric, so we don't need to remove dimensions.
 
 Cov_ALW_lda <- lda(as.matrix(Cov_ALW_shape[, 3:14]), Cov_ALW_shape$Taxon, method = "mle")
@@ -279,13 +388,16 @@ plot(Cov_ALW_pca_lda$LD1, Cov_ALW_pca_lda$LD2, col = c(SW_palette("Main")[1], SW
   legend('topleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 ```
 
+<img src="Neonympha_geomorph_files/figure-html/BO_lda-1.png" style="display: block; margin: auto;" />
+
 
 
 # Discriminant analysis
 
 
 ## `Pattern`
-```{r Pattern_df}
+
+```r
 Pattern_DF <- predict(Pattern_lda)
 Pattern_pca_DF <- cbind(Pattern_pca_lda, Pattern_DF$posterior)
 
@@ -311,12 +423,13 @@ hist(N_mi_P_DF$N.mi, col = SW_palette("TESB")[8], main = "", ylab = "", xlab = "
   text(0.35, 50, expression(paste(bolditalic("N. m. mitchellii"))), cex = 1.5)
   abline(v = mean(N_mi_P_DF$N.mi), lty = 2, lwd = 2)
 ```
-```{r reset_1, echo = FALSE}
-par(mfrow = c(1, 1))
-```
+
+<img src="Neonympha_geomorph_files/figure-html/Pattern_df-1.png" style="display: block; margin: auto;" />
+
 
 ## `Structure`
-```{r Structure_df}
+
+```r
 Structure_DF <- predict(Structure_lda)
 Structure_pca_DF <- cbind(Structure_pca_lda, Structure_DF$posterior)
 
@@ -342,13 +455,14 @@ hist(N_mi_S_DF$N.mi, col = SW_palette("TESB")[8], main = "", ylab = "", xlab = "
   text(0.35, 50, expression(paste(bolditalic("N. m. mitchellii"))), cex = 1.5)
   abline(v = mean(N_mi_S_DF$N.mi), lty = 2, lwd = 2)
 ```
-```{r reset_2, echo = FALSE}
-par(mfrow = c(1, 1))
-```
+
+<img src="Neonympha_geomorph_files/figure-html/Structure_df-1.png" style="display: block; margin: auto;" />
+
 
 ## Border ocelli
 
-```{r BO_df}
+
+```r
 Cov_ALW_DF <- predict(Cov_ALW_lda)
 Cov_ALW_pca_DF <- cbind(Cov_ALW_pca_lda, Cov_ALW_DF$posterior)
 
@@ -373,18 +487,21 @@ hist(N_fr_Cov_DF$N.fr, col = SW_palette("ROTJ")[3], main = "", xlab = "Posterior
 hist(N_mi_Cov_DF$N.mi, col = SW_palette("TESB")[8], main = "", ylab = "", xlab = "Posterior probability", ylim = c(0, 60), xlim = c(0, 1), las = 1, cex.lab = 1.5)
   text(0.35, 50, expression(paste(bolditalic("N. m. mitchellii"))), cex = 1.5)
   abline(v = mean(N_mi_Cov_DF$N.mi), lty = 2, lwd = 2)
+```
+
+<img src="Neonympha_geomorph_files/figure-html/BO_df-1.png" style="display: block; margin: auto;" />
 
 ```
-```{r reset_3, echo = FALSE}
-par(mfrow = c(1, 1))
-dev.off()
+## null device 
+##           1
 ```
 
 # Warp grids
 
 ## `Pattern`
 
-```{r Pattern_grids, warning = FALSE, error = TRUE}
+
+```r
 # Need to do calculate the mean shape for each taxon
 Pp <- dim(Pattern_gpa$coords)[1]
 Pk <- dim(Pattern_gpa$coords)[2]
@@ -398,7 +515,13 @@ for(i in 1:length(levels(P_group))){
 	PY[, , i] <- mshape(foo)
 }
 dim(PY)
+```
 
+```
+## [1] 26  2  4
+```
+
+```r
 P_reference <- mshape(Pattern_gpa$coords) # Mean shape for Neonympha pattern
 
 Nar_PY <- PY[, , 1]
@@ -411,6 +534,13 @@ plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW
 # Warp grid for N. areolata
 par(fig = c(0.08, 0.28, 0.58, 0.93), new = TRUE)
 plot.new()
+```
+
+```
+## Error in plot.new(): figure margins too large
+```
+
+```r
 par(mar = c(1, 1, 1, 1))
 N_ar_pars <- gridPar(tar.pt.bg = SW_palette("Main")[1], tar.pt.size = 1.5)
 plotRefToTarget(P_reference, Nar_PY, method = "TPS", mag = 2, gridPars = N_ar_pars)
@@ -436,6 +566,6 @@ par(mar = c(1, 1, 1, 1))
 N_mi_pars <- gridPar(tar.pt.bg = SW_palette("TESB")[8], tar.pt.size = 1.5)
 plotRefToTarget(P_reference, Nmi_PY, method = "TPS", mag = 2, gridPars = N_mi_pars)
 ```
-```{r reset_4, echo = FALSE}
-par(mfrow = c(1, 1))
-```
+
+<img src="Neonympha_geomorph_files/figure-html/Pattern_grids-1.png" style="display: block; margin: auto;" />
+
