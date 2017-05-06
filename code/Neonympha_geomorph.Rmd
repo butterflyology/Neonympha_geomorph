@@ -85,7 +85,7 @@ dim(Structure_raw)
 
 For the `structure` data set we placedn 15 Type 1 landmarks on the ventral hind wing where there were vein-vein intersections and where a vein terminate at the wing margin. Column headers in the `structure` data set start with `sRawCoord`. We landmarked a total of 215 male *Neonympha* butterflies. 
 
-### `Covariate` data
+### `Covariate` raw data
 ```{r Covariate_data, message = FALSE}
 Covariate_data <- read.csv("../data/BO0_12_Dec.csv", header = TRUE)
 dim(Covariate_data) 
@@ -104,7 +104,7 @@ The data in this object are:
 - Column 3:8 - `BO1 - BO6` - Area covered by border ocellus in mm^2^ starting with the anterior most wing cell.
 - Column 9, 11, 13, 15, 17, 19 - `L` - Length in mm of the ocellus. Ex. `B5L` represents length of ocellus in cell 5.
 - Column 10, 12, 14, 16, 18, 20 - `W` - Width in mm of the ocellus. Ex. `B5W` represents width of ocellus in cell 5. 
-- Column 21 - Norht latitude where sample was collected.
+- Column 21 - North latitude where sample was collected.
 
 ### Merging data
 
@@ -149,8 +149,7 @@ rownames(Structure_2d) <- Combined_data$Taxon
 
 ### Phylogenetic data
 
-We import the phylogenetic tree. Because this is such a small tree it isn't really possible to test values of $\lambda$ (the smooting parameter) to use penalized likelihood (Sanerson 2002). So we will force it to be an ultrametric tree. 
-
+Import the species level phylogeny from Hamm et *al.* 2013. Because this is such a small tree it isn't really possible to test values of $\lambda$ (the smooting parameter) to use penalized likelihood (Sanderson 2002). So we will force it to be an ultrametric tree. 
 ```{r Phylogenetic_data, message = FALSE}
 Neonympha_phylogeny <- read.nexus("../data/MSB_tree2.tre")
 is.ultrametric(Neonympha_phylogeny)
@@ -165,8 +164,6 @@ Neonympha_ultrametric_0 <- chronopl(Neonympha_phylogeny, lambda = 0, age.min = 1
 plot(Neonympha_ultrametric_0)
 is.ultrametric(Neonympha_ultrametric_0)
 ```
-
-Import the species level phylogeny from Hamm et *al.* 2013. 
 
 
 
@@ -197,7 +194,6 @@ plot(colMeans(Pattern_2d[c(seq(1, 51, 2)), ]), colMeans(Pattern_2d[c(seq(2, 52, 
 ## `Structure` data
 
 A plot of all superimposed landmarks and the mean landmark for each species.
-
 ```{r Structure_visualization}
 N_ar_s_mean <- colMeans(Structure_2d[Combined_data$Taxon == "N.ar", ])
 N_he_s_mean <- colMeans(Structure_2d[Combined_data$Taxon == "N.he", ])
@@ -222,7 +218,6 @@ plot(colMeans(Structure_2d[c(seq(1, 29, 2)), ]), colMeans(Structure_2d[c(seq(2, 
 ## Linear Discriminant Analysis
 
 ### `Pattern`
-
 ```{r Pattern_lda, warning = FALSE}
 # The first step is to conduct a Principle Componants Analysis (PCA)
 Pattern_pca <- prcomp(Pattern_2d)
@@ -242,7 +237,6 @@ plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW
 ```
 
 ### `Structure` 
-
 ```{r Structure_lda, warning = FALSE}
 Structure_pca <- prcomp(Structure_2d)
 summary(Structure_pca)$importance[, 1:4]
@@ -258,8 +252,7 @@ plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2, col = c(SW_palette("Main")[1]
   legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 ```
 
-### Border ocelli
-
+### `Covariate`
 ```{r BO_lda, warning = FALSE}
 # Not all individuals have border ocelli in cells 1 and 2, so we will omit those from this analysis. We will select the area, lenght and width of border ocelli from cells 3:6.
 
@@ -280,11 +273,9 @@ plot(Cov_ALW_pca_lda$LD1, Cov_ALW_pca_lda$LD2, col = c(SW_palette("Main")[1], SW
 ```
 
 
+## Discriminant analysis
 
-# Discriminant analysis
-
-
-## `Pattern`
+### `Pattern`
 ```{r Pattern_df}
 Pattern_DF <- predict(Pattern_lda)
 Pattern_pca_DF <- cbind(Pattern_pca_lda, Pattern_DF$posterior)
@@ -311,11 +302,11 @@ hist(N_mi_P_DF$N.mi, col = SW_palette("TESB")[8], main = "", ylab = "", xlab = "
   text(0.35, 50, expression(paste(bolditalic("N. m. mitchellii"))), cex = 1.5)
   abline(v = mean(N_mi_P_DF$N.mi), lty = 2, lwd = 2)
 ```
-```{r reset_1, echo = FALSE}
+```{r reset_1, echo = FALSE, warning = FALSE, results = "hide"}
 par(mfrow = c(1, 1))
 ```
 
-## `Structure`
+### `Structure`
 ```{r Structure_df}
 Structure_DF <- predict(Structure_lda)
 Structure_pca_DF <- cbind(Structure_pca_lda, Structure_DF$posterior)
@@ -342,12 +333,11 @@ hist(N_mi_S_DF$N.mi, col = SW_palette("TESB")[8], main = "", ylab = "", xlab = "
   text(0.35, 50, expression(paste(bolditalic("N. m. mitchellii"))), cex = 1.5)
   abline(v = mean(N_mi_S_DF$N.mi), lty = 2, lwd = 2)
 ```
-```{r reset_2, echo = FALSE}
+```{r reset_2, echo = FALSE, warning = FALSE, results = "hide"}
 par(mfrow = c(1, 1))
 ```
 
-## Border ocelli
-
+#### `Covariate`
 ```{r BO_df}
 Cov_ALW_DF <- predict(Cov_ALW_lda)
 Cov_ALW_pca_DF <- cbind(Cov_ALW_pca_lda, Cov_ALW_DF$posterior)
@@ -373,17 +363,72 @@ hist(N_fr_Cov_DF$N.fr, col = SW_palette("ROTJ")[3], main = "", xlab = "Posterior
 hist(N_mi_Cov_DF$N.mi, col = SW_palette("TESB")[8], main = "", ylab = "", xlab = "Posterior probability", ylim = c(0, 60), xlim = c(0, 1), las = 1, cex.lab = 1.5)
   text(0.35, 50, expression(paste(bolditalic("N. m. mitchellii"))), cex = 1.5)
   abline(v = mean(N_mi_Cov_DF$N.mi), lty = 2, lwd = 2)
-
 ```
-```{r reset_3, echo = FALSE}
+```{r reset_3, echo = FALSE, warning = FALSE, results = "hide"}
 par(mfrow = c(1, 1))
-dev.off()
 ```
 
-# Warp grids
 
-## `Pattern`
+## Procrustes ANOVA
 
+### Create the `geomorph.data.frame`
+```{r Geomorph_data.frame}
+Neonympha_data.frame <- geomorph.data.frame(Pattern = Pattern_gpa$coords, Pattern_logCS = log(Pattern_gpa$Csize), Structure = Structure_gpa$coords, Structure_logCS = log(Structure_gpa$Csize), Taxon = Combined_data$Taxon, BO_size = Combined_data[, 87:90], BO_LW = Combined_data[, 95:102], Lat = Combined_data$Lat)
+attributes(Neonympha_data.frame)
+```
+
+### `Pattern`
+
+#### `Pattern` and by taxon
+```{r Pattern_taxon}
+apd_1 <- advanced.procD.lm(f1 = Pattern ~ 1, Pattern ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+summary(apd_1)
+```
+Including taxon does a better job explaining `pattern` variation than a null model.
+
+#### `Pattern` by taxon and size (factor interaction)
+```{r Pattern_size_species}
+apd_1a <- advanced.procD.lm(f1 = Pattern ~ Taxon * Pattern_logCS, f2 = Pattern ~ Taxon + Pattern_logCS, groups = ~Taxon * Pattern_logCS, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+summary(apd_1a)
+```
+
+#### Pattern centroid size by taxon and latitude
+```{r CS_taxon_lat}
+apd_1b <-  advanced.procD.lm(f1 = Pattern_logCS ~ Taxon * Lat, f2 = Pattern_logCS ~ Taxon + Lat, data = Neonympha_data.frame, groups = ~Taxon * Lat, iter = 1e4, seed = 76234, print.progress = FALSE)
+summary(apd_1b)
+```
+
+### `Structure`
+
+#### `Structure` by taxon
+```{r Structure_taxon}
+apd_2 <- advanced.procD.lm(f1 = Structure ~ 1, Structure ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+summary(apd_2)
+```
+Including taxon does a better job explaining `structure` variation than a null model. 
+
+### `Covariate` size by taxon
+```{r Covariate_size_taxon}
+apd_3 <- advanced.procD.lm(f1 = Combined_data[, 87:90] ~ 1, Combined_data[, 87:90] ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+summary(apd_3)
+```
+
+### `Covariate`
+
+#### `Covariate` lenght and width by taxon
+```{r Covariate_LW_taxon}
+apd_4 <- advanced.procD.lm(f1 = Combined_data[, 95:102] ~ 1, Combined_data[, 95:102] ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+summary(apd_4)
+```
+
+
+# Misc.
+
+
+## Warp grids
+
+
+### `Pattern`
 ```{r Pattern_grids, warning = FALSE, error = TRUE}
 # Need to do calculate the mean shape for each taxon
 Pp <- dim(Pattern_gpa$coords)[1]
@@ -413,29 +458,82 @@ par(fig = c(0.08, 0.28, 0.58, 0.93), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 N_ar_pars <- gridPar(tar.pt.bg = SW_palette("Main")[1], tar.pt.size = 1.5)
-plotRefToTarget(P_reference, Nar_PY, method = "TPS", mag = 2, gridPars = N_ar_pars)
+plotRefToTarget(P_reference, Nar_PY, method = "TPS", mag = 3, gridPars = N_ar_pars)
 
 # Warp grid for N. helicta
 par(fig = c(0.08, 0.28, 0.1, 0.45), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 N_he_pars <- gridPar(tar.pt.bg = SW_palette("Inquisitor")[1], tar.pt.size = 1.5)
-plotRefToTarget(P_reference, Nhe_PY, method = "TPS", mag = 2, gridPars = N_he_pars)
+plotRefToTarget(P_reference, Nhe_PY, method = "TPS", mag = 3, gridPars = N_he_pars)
 
 # Warp grid for N. m. francisi
 par(fig = c(0.76, 0.96, 0.1, 0.45), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 N_fr_pars <- gridPar(tar.pt.bg = SW_palette("ROTJ")[3], tar.pt.size = 1.5)
-plotRefToTarget(P_reference, Nfr_PY, method = "TPS", mag = 2, gridPars = N_fr_pars)
+plotRefToTarget(P_reference, Nfr_PY, method = "TPS", mag = 3, gridPars = N_fr_pars)
 
 # Warp grid for N. m. mitchellii
 par(fig = c(0.76, 0.96, 0.58, 0.93), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 N_mi_pars <- gridPar(tar.pt.bg = SW_palette("TESB")[8], tar.pt.size = 1.5)
-plotRefToTarget(P_reference, Nmi_PY, method = "TPS", mag = 2, gridPars = N_mi_pars)
+plotRefToTarget(P_reference, Nmi_PY, method = "TPS", mag = 3, gridPars = N_mi_pars)
 ```
-```{r reset_4, echo = FALSE}
-par(mfrow = c(1, 1))
+```{r reset_4, echo = FALSE, warning = FALSE, results = "hide"}
+dev.off()
+```
+
+
+### `Structure`
+```{r Strcuture_grids, warning = FALSE, error = TRUE}
+Sp <- dim(Structure_gpa$coords)[1]
+Sk <- dim(Structure_gpa$coords)[2]
+S_group <- Combined_data$Taxon
+SY <- array(NA, dim = c(Sp, Sk, length(levels(S_group))))
+dimnames(SY)[[3]] <- levels(S_group)
+
+for(i in 1:length(levels(S_group))){
+	grp <- Structure_2d[which(S_group == levels(S_group)[i]), ]
+	foo <- arrayspecs(grp, Sp, Sk)
+	SY[, , i] <- mshape(foo)
+}
+dim(SY)
+
+S_reference <- mshape(Structure_gpa$coords) # Mean shape for Neonympha Structure
+
+Nar_SY <- SY[, , 1]
+Nhe_SY <- SY[, , 3]
+Nfr_SY <- SY[, , 2]
+Nmi_SY <- SY[, , 4]
+
+plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Structure_pca_lda$Taxon], pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD 2 (15.5%)', xlim =c(-5, 7), ylim = c(-5, 5), cex = 2, las = 1 )
+
+# Warp grid for N. areolata
+par(fig = c(0.08, 0.28, 0.55, 0.9), new = TRUE)
+plot.new()
+par(mar = c(1, 1, 1, 1))
+plotRefToTarget(S_reference, Nar_SY, method = "TPS", mag = 3, gridPars = N_ar_pars)
+
+# Warp grid for N. helicta
+par(fig = c(0.08, 0.28, 0.15, 0.5), new = TRUE)
+plot.new()
+par(mar = c(1, 1, 1, 1))
+plotRefToTarget(S_reference, Nhe_SY, method = "TPS", mag = 3, gridPars = N_he_pars)
+
+# Warp grid for N. m. francisi
+par(fig = c(0.76, 0.96, 0.15, 0.5), new = TRUE)
+plot.new()
+par(mar = c(1, 1, 1, 1))
+plotRefToTarget(S_reference, Nfr_SY, method = "TPS", mag = 3, gridPars = N_fr_pars)
+
+# Warp grid for N. m. mitchellii
+par(fig = c(0.76, 0.96, 0.55, 0.9), new = TRUE)
+plot.new()
+par(mar = c(1, 1, 1, 1))
+plotRefToTarget(S_reference, Nmi_SY, method = "TPS", mag = 3, gridPars = N_mi_pars)
+```
+```{r reset_5, echo = FALSE, warning = FALSE, results = "hide"}
+dev.off()
 ```
