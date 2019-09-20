@@ -16,5 +16,6 @@ For the `docker` image:
     docker commit -m "fastai_jupyter" <image_id> butterflyology/fastai_jupyter
     docker push butterflyology/fastai_jupyter
 
+This will run the `docker` image and point the volume to the repo:
 
-    nvidia-docker run --rm -p localhost:8888 -v  butterflyology/fastai_jupyter jupyter notebook
+    nvidia-docker run --rm -p 8888:8888 -v ~/Projects/Neonympha_classification:/workspace butterflyology/fastai_jupyter jupyter notebook
