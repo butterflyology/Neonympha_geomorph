@@ -18,4 +18,6 @@ For the `docker` image:
 
 This will run the `docker` image and point the volume to the repo:
 
-    nvidia-docker run --rm -p 8888:8888 -v ~/Projects/Neonympha_classification:/workspace butterflyology/fastai_jupyter jupyter notebook
+    nvidia-docker run --rm --ipc=host -p 8888:8888 -v ~/Projects/Neonympha_classification:/workspace butterflyology/fastai_jupyter jupyter notebook
+
+- 2019-09-19: Got the `docker` file working and the data imported and the silly thing crashes with the `resnet34` model because of some driver problem. Adding a flag (--ipc=host) fixed that. Should still look into the drive issue.
