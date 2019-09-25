@@ -28,3 +28,5 @@ This will run the `docker` image and point the volume to the repo:
   Saved output as `Nfr_photos.txt`
   - "Neonympha mitchellii mitchellii"  -areolata -helicta -francisci - Saved output as `Nmi_photos.txt`
   - "Neonympha helicta"  -areolata -mitchellii -francisci - Saved output as `Nhe_photos.txt`
+
+- 2019-09-25: Should consider reaching out to people for more images to test. Or, maybe this is better, make an app people can check photos on. 
