@@ -11,3 +11,4 @@ Major commits:
 1. 2019-09-24: Further refining the models, tweaking image size and validation set size. Added a bash script to launch the `docker` image.
 1. 2019-09-25: Cropped some images to remove borders and ruler edges (which were present at higher frequencies in *N. helicta* images).
 1. 2019-10-02: Beginning progressive augmentation ala Jeremy Howard.
+1. 2019-10-03: With progression resizing data augmentation get the error down to 9% with the error coming between *N. areolata* and *N. helicta*. 
