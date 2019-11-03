@@ -12,4 +12,4 @@ Major commits:
 1. 2019-09-25: Cropped some images to remove borders and ruler edges (which were present at higher frequencies in *N. helicta* images).
 1. 2019-10-02: Beginning progressive augmentation ala Jeremy Howard.
 1. 2019-10-03: With progression resizing data augmentation get the error down to 9% with the error coming between *N. areolata* and *N. helicta*.
-1. 2019-11-03: Branching off `google_images` to make wire frames for the PCA plots.  
+1. 2019-11-03: Branching off `google_images` to make wire frames for the PCA plots. Woops, alrady did it. But I found that the procrustes anova code needs to be updated.
