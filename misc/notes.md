@@ -30,4 +30,5 @@ This will run the `docker` image and point the volume to the repo:
   - "Neonympha helicta"  -areolata -mitchellii -francisci - Saved output as `Nhe_photos.txt`
 
 - 2019-09-25: Should consider reaching out to people for more images to test. Or, maybe this is better, make an app people can check photos on.
-- 2019-09-25: Progressive augmentation beginning with 64 pixel images is done, next 128 and the 256. 
+- 2019-09-25: Progressive augmentation beginning with 64 pixel images is done, next 128 and the 256.
+- 2019-11-03: Making the `resnet50` model. Makes the same mistakes as `resnet34`.
