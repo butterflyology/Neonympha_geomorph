@@ -62,7 +62,7 @@ We want to conduct our analyses on the same individuals throughout the study. Af
 
 ### `Pattern` raw data
 ```{r Pattern_raw, message = FALSE}
-Pattern_raw <- read.csv("../data/Pattern_raw.csv", header = TRUE) 
+Pattern_raw <- read.csv("../data/geomorph/Pattern_raw.csv", header = TRUE) 
 dim(Pattern_raw)
 ```
 
@@ -79,7 +79,7 @@ This data frame contains a lot of information, some we need and some we don't:
 
 ### `Structure` raw data
 ```{r Structure_raw, message = FALSE}
-Structure_raw <- read.csv("../data/Structure_raw.csv", header = TRUE)
+Structure_raw <- read.csv("../data/geomorph/Structure_raw.csv", header = TRUE)
 dim(Structure_raw)
 ```
 
@@ -87,7 +87,7 @@ For the `structure` data set we placedn 15 Type 1 landmarks on the ventral hind 
 
 ### `Covariate` raw data
 ```{r Covariate_data, message = FALSE}
-Covariate_data <- read.csv("../data/BO0_12_Dec.csv", header = TRUE)
+Covariate_data <- read.csv("../data/geomorph/BO0_12_Dec.csv", header = TRUE)
 dim(Covariate_data) 
 ```
 
@@ -151,18 +151,18 @@ rownames(Structure_2d) <- Combined_data$Taxon
 
 Import the species level phylogeny from Hamm et *al.* 2013. Because this is such a small tree it isn't really possible to test values of $\lambda$ (the smooting parameter) to use penalized likelihood (Sanderson 2002). So we will force it to be an ultrametric tree. 
 ```{r Phylogenetic_data, message = FALSE}
-Neonympha_phylogeny <- read.nexus("../data/MSB_tree2.tre")
-is.ultrametric(Neonympha_phylogeny)
-
-Neonympha_ultrametric_1 <- chronopl(Neonympha_phylogeny, lambda = 1, iter.max = 1e4, CV = TRUE) # Lambda of 1 implies highly variable rates among lineages
-
-plot(Neonympha_ultrametric_1)
-is.ultrametric(Neonympha_ultrametric_1)
-Neonympha_ultrametric_1$edge_length <- c(0.4, 0.6, 0.1, 0.15, 0.001, 0.6, 1) # Manually add edge lengths from Hamm et al. 2014.
-
-Neonympha_ultrametric_0 <- chronopl(Neonympha_phylogeny, lambda = 0, age.min = 1, age.max = NULL, tol = 1e-8, eval.max = 1000, iter.max = 1e4, CV = TRUE)
-plot(Neonympha_ultrametric_0)
-is.ultrametric(Neonympha_ultrametric_0)
+# Neonympha_phylogeny <- read.nexus("../data/MSB_tree2.tre")
+# is.ultrametric(Neonympha_phylogeny)
+# 
+# Neonympha_ultrametric_1 <- chronopl(Neonympha_phylogeny, lambda = 1, iter.max = 1e4, CV = TRUE) # Lambda of 1 implies highly variable rates among lineages
+# 
+# plot(Neonympha_ultrametric_1)
+# is.ultrametric(Neonympha_ultrametric_1)
+# Neonympha_ultrametric_1$edge_length <- c(0.4, 0.6, 0.1, 0.15, 0.001, 0.6, 1) # Manually add edge lengths from Hamm et al. 2014.
+# 
+# Neonympha_ultrametric_0 <- chronopl(Neonympha_phylogeny, lambda = 0, age.min = 1, age.max = NULL, tol = 1e-8, eval.max = 1000, iter.max = 1e4, CV = TRUE)
+# plot(Neonympha_ultrametric_0)
+# is.ultrametric(Neonympha_ultrametric_0)
 ```
 
 
@@ -381,44 +381,44 @@ attributes(Neonympha_data.frame)
 
 #### `Pattern` and by taxon
 ```{r Pattern_taxon}
-apd_1 <- advanced.procD.lm(f1 = Pattern ~ 1, Pattern ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
-summary(apd_1)
+# apd_1 <- advanced.procD.lm(f1 = Pattern ~ 1, Pattern ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+# summary(apd_1)
 ```
 Including taxon does a better job explaining `pattern` variation than a null model.
 
 #### `Pattern` by taxon and size (factor interaction)
 ```{r Pattern_size_species}
-apd_1a <- advanced.procD.lm(f1 = Pattern ~ Taxon * Pattern_logCS, f2 = Pattern ~ Taxon + Pattern_logCS, groups = ~Taxon * Pattern_logCS, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
-summary(apd_1a)
+# apd_1a <- advanced.procD.lm(f1 = Pattern ~ Taxon * Pattern_logCS, f2 = Pattern ~ Taxon + Pattern_logCS, groups = ~Taxon * Pattern_logCS, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+# summary(apd_1a)
 ```
 
 #### Pattern centroid size by taxon and latitude
 ```{r CS_taxon_lat}
-apd_1b <-  advanced.procD.lm(f1 = Pattern_logCS ~ Taxon * Lat, f2 = Pattern_logCS ~ Taxon + Lat, data = Neonympha_data.frame, groups = ~Taxon * Lat, iter = 1e4, seed = 76234, print.progress = FALSE)
-summary(apd_1b)
+# apd_1b <-  advanced.procD.lm(f1 = Pattern_logCS ~ Taxon * Lat, f2 = Pattern_logCS ~ Taxon + Lat, data = Neonympha_data.frame, groups = ~Taxon * Lat, iter = 1e4, seed = 76234, print.progress = FALSE)
+# summary(apd_1b)
 ```
 
 ### `Structure`
 
 #### `Structure` by taxon
 ```{r Structure_taxon}
-apd_2 <- advanced.procD.lm(f1 = Structure ~ 1, Structure ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
-summary(apd_2)
+# apd_2 <- advanced.procD.lm(f1 = Structure ~ 1, Structure ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+# summary(apd_2)
 ```
 Including taxon does a better job explaining `structure` variation than a null model. 
 
 ### `Covariate` size by taxon
 ```{r Covariate_size_taxon}
-apd_3 <- advanced.procD.lm(f1 = Combined_data[, 87:90] ~ 1, Combined_data[, 87:90] ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
-summary(apd_3)
+# apd_3 <- advanced.procD.lm(f1 = Combined_data[, 87:90] ~ 1, Combined_data[, 87:90] ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+# summary(apd_3)
 ```
 
 ### `Covariate`
 
 #### `Covariate` lenght and width by taxon
 ```{r Covariate_LW_taxon}
-apd_4 <- advanced.procD.lm(f1 = Combined_data[, 95:102] ~ 1, Combined_data[, 95:102] ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
-summary(apd_4)
+# apd_4 <- advanced.procD.lm(f1 = Combined_data[, 95:102] ~ 1, Combined_data[, 95:102] ~ Taxon, data = Neonympha_data.frame, iter = 1e4, seed = 76234, print.progress = FALSE)
+# summary(apd_4)
 ```
 
 
