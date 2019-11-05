@@ -13,3 +13,4 @@ Major commits:
 1. 2019-10-02: Beginning progressive augmentation ala Jeremy Howard.
 1. 2019-10-03: With progression resizing data augmentation get the error down to 9% with the error coming between *N. areolata* and *N. helicta*.
 1. 2019-11-03: Branching off `google_images` to make wire frames for the PCA plots. Woops, alrady did it. But I found that the procrustes anova code needs to be updated.  Working on `resnet50` with the resampling paradigm.
+1. 2019-11-04: Cleaned up the `R` code to work with the latest `geomorph` and saved the packages and state in `misc/Neonympha_geommorph_packages.txt`.
