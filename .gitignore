@@ -2,3 +2,5 @@
 .Rproj.user
 .ipynb_checkpoints/
 *.Rproj
+models/
+

@@ -32,3 +32,5 @@ This will run the `docker` image and point the volume to the repo:
 - 2019-09-25: Should consider reaching out to people for more images to test. Or, maybe this is better, make an app people can check photos on.
 - 2019-09-25: Progressive augmentation beginning with 64 pixel images is done, next 128 and the 256.
 - 2019-11-03: Making the `resnet50` model. Makes the same mistakes as `resnet34`.
+- 2019-11-06: Makes same misclassifications as with them. I think that is good news. No difference between`resnet34` and `resnet50`, suggests that each picks up on the important things and the extra power isn't helpful.
+- 2020-01-07: Essentially copied the museum photos into a <kbd>Supplemented</kbd> directory and added the Google Image photos. The museum photos reside in the <kbd>Museum</kbd> directory.
