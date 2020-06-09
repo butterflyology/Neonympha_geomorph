@@ -35,3 +35,4 @@ This will run the `docker` image and point the volume to the repo:
 - 2019-11-06: Makes same misclassifications as with them. I think that is good news. No difference between`resnet34` and `resnet50`, suggests that each picks up on the important things and the extra power isn't helpful.
 - 2020-01-07: Essentially copied the museum photos into a <kbd>Supplemented</kbd> directory and added the Google Image photos. The museum photos reside in the <kbd>Museum</kbd> directory.
 - 2020-01-20: Added the `imgaug` package to the `docker` image. Also added `Augmentor`.
+- 2020-06-09: Need to work on the image augmentation, especially the color normalization. Fixed the path from `gimage` to `mimage` in the `museum_images.ipynb`.
