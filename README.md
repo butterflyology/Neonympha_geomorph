@@ -19,3 +19,5 @@ Major commits:
 1. 2020-01-22: Used `Augmentor` package to augment the museum images.
 1. 2020-06-09: Updated paths for museum images.
 1. 2020-06-16: Having issues with the `ClassConfusion` widget.
+1. 2020-06-17: Working on `imageaug` branch and the `imageaug` tools.
+1. 2021-09-30: Working with `momocs` package in `R`.

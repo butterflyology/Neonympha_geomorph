@@ -17,7 +17,7 @@ library("spaceMovie")
 # sink()
 
 ### Pattern raw data
-Pattern_raw <- read.csv("data/geomorph/Pattern_raw.csv", header = TRUE) 
+Pattern_raw <- read.csv("data/geomorph/Pattern_raw.csv", header = TRUE)
 dim(Pattern_raw)
 
 
@@ -28,7 +28,7 @@ dim(Structure_raw)
 
 ### Covariate raw data
 Covariate_data <- read.csv("data/geomorph/BO0_12_Dec.csv", header = TRUE)
-dim(Covariate_data) 
+dim(Covariate_data)
 
 
 ### Merging data
@@ -70,11 +70,11 @@ N_mi_p_mean <- colMeans(Pattern_2d[Combined_data$Taxon == "N.mi", ])
 
 plot(colMeans(Pattern_2d[c(seq(1, 51, 2)), ]), colMeans(Pattern_2d[c(seq(2, 52, 2)), ]), type = 'n', xlab = 'X Coordinate', ylab ='Y Coordinate', xlim = c(-0.35, 0.25), ylim = c(-0.35, 0.35), las = 1)
 points(as.matrix(Pattern_2d[, c(seq(1, 51, 2)) ]), pch = 19, as.matrix(Pattern_2d[, c(seq(2, 52, 2)) ]), col = rgb(0.745098, 0.745098, 0.745098, 0.25))
-points(colMeans(Pattern_2d[, c(seq(1, 51, 2)) ]), pch = 19, colMeans(Pattern_2d[, c(seq(2, 52, 2)) ]), col = "black")	
-points(N_ar_p_mean[ c(seq(1, 51, 2))] , N_ar_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("Main")[1]) 
-points(N_he_p_mean[ c(seq(1, 51, 2))] , N_he_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("Inquisitor")[1]) 
-points(N_fr_p_mean[ c(seq(1, 51, 2))] , N_fr_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("ROTJ")[3]) 
-points(N_mi_p_mean[ c(seq(1, 51, 2))] , N_mi_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("TESB")[8]) 
+points(colMeans(Pattern_2d[, c(seq(1, 51, 2)) ]), pch = 19, colMeans(Pattern_2d[, c(seq(2, 52, 2)) ]), col = "black")
+points(N_ar_p_mean[ c(seq(1, 51, 2))] , N_ar_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("Main")[1])
+points(N_he_p_mean[ c(seq(1, 51, 2))] , N_he_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("Inquisitor")[1])
+points(N_fr_p_mean[ c(seq(1, 51, 2))] , N_fr_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("ROTJ")[3])
+points(N_mi_p_mean[ c(seq(1, 51, 2))] , N_mi_p_mean[ c(seq(2, 52, 2))] , pch = 19, col = SW_palette("TESB")[8])
 legend('bottomleft', legend = c('Individual landmarks','Grand mean', expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), col = c('grey','black', SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pch = 19, bty = 'n')
 
 
@@ -86,11 +86,11 @@ N_mi_s_mean <- colMeans(Structure_2d[Combined_data$Taxon == "N.mi", ])
 
 plot(colMeans(Structure_2d[c(seq(1, 29, 2)), ]), colMeans(Structure_2d[c(seq(2, 30, 2)), ]), type = 'n', xlab = 'X Coordinate', ylab ='Y Coordinate', xlim = c(-0.4, 0.3), ylim = c(-0.4, 0.4), las = 1)
 points(as.matrix(Structure_2d[, c(seq(1, 29, 2)) ]), pch = 19, as.matrix(Structure_2d[, c(seq(2, 30, 2)) ]), col = rgb(0.745098, 0.745098, 0.745098, 0.25))
-points(colMeans(Structure_2d[, c(seq(1, 29, 2)) ]), pch = 19, colMeans(Structure_2d[, c(seq(2, 30, 2)) ]), col = "black")	
+points(colMeans(Structure_2d[, c(seq(1, 29, 2)) ]), pch = 19, colMeans(Structure_2d[, c(seq(2, 30, 2)) ]), col = "black")
 points(N_ar_s_mean[ c(seq(1, 29, 2))] , N_ar_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("Main")[1])
-points(N_he_s_mean[ c(seq(1, 29, 2))] , N_he_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("Inquisitor")[1]) 
-points(N_fr_s_mean[ c(seq(1, 29, 2))] , N_fr_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("ROTJ")[3]) 
-points(N_mi_s_mean[ c(seq(1, 29, 2))] , N_mi_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("TESB")[8]) 
+points(N_he_s_mean[ c(seq(1, 29, 2))] , N_he_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("Inquisitor")[1])
+points(N_fr_s_mean[ c(seq(1, 29, 2))] , N_fr_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("ROTJ")[3])
+points(N_mi_s_mean[ c(seq(1, 29, 2))] , N_mi_s_mean[ c(seq(2, 30, 2))] , pch = 19, col = SW_palette("TESB")[8])
 legend('topleft', legend = c('Individual landmarks','Grand mean', expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), col = c('grey','black', SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pch = 19, bty = 'n')
 
 
@@ -115,7 +115,7 @@ plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW
 legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 
 
-### Structure 
+### Structure
 Structure_pca <- prcomp(Structure_2d)
 summary(Structure_pca)$importance[, 1:4]
 
@@ -299,7 +299,7 @@ anova(slm_1b, slm_1a)
 
 slm_1_pw <- pairwise(fit = slm_1a, fit.null = slm_1b, groups = Neonympha_data.frame$Taxon) # much better fit
 
-summary(slm_1_pw, test.type = "dist", confidence = 0.95) # Structire can distinguish taxa, pattern can too. Interesting that structure distinguished Nar from Nhe. Some latitude effect? 
+summary(slm_1_pw, test.type = "dist", confidence = 0.95) # Structure can distinguish taxa, pattern can too. Interesting that structure distinguished Nar from Nhe. Some latitude effect?
 
 # Structure by latitude
 slm_2a <- procD.lm(Structure ~ Taxon * Lat, data = Neonympha_data.frame, effect.type = "F", SS.type = "I", iter = 1e4, seed = 76234, print.progress = TRUE)
@@ -310,7 +310,7 @@ summary(slm_2b)
 
 anova(slm_2b, slm_2a) # Interaction model is better
 
-slm_2_pw <- pairwise(fit = slm_2a, fit.null = slm_2b, groups = Neonympha_data.frame$Taxon) # 
+slm_2_pw <- pairwise(fit = slm_2a, fit.null = slm_2b, groups = Neonympha_data.frame$Taxon) #
 
 summary(slm_2_pw, test.type = "dist", confidence = 0.95)
 
@@ -323,7 +323,7 @@ summary(clm_1b)
 
 anova(clm_1b, clm_1a)
 
-clm_1_pw <- pairwise(fit = clm_1a, fit.null = clm_1b, groups = Neonympha_data.frame$Taxon) # 
+clm_1_pw <- pairwise(fit = clm_1a, fit.null = clm_1b, groups = Neonympha_data.frame$Taxon) #
 
 summary(clm_1_pw, test.type = "dist", confidence = 0.95)
 
@@ -342,7 +342,7 @@ summary(clm_2b)
 
 anova(clm_2b, clm_2a)
 
-clm_2_pw <- pairwise(fit = clm_2a, fit.null = clm_2b, groups = Neonympha_data.frame$Taxon) # 
+clm_2_pw <- pairwise(fit = clm_2a, fit.null = clm_2b, groups = Neonympha_data.frame$Taxon) #
 
 summary(clm_2_pw, test.type = "dist", confidence = 0.95)
 

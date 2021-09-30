@@ -1,9 +1,9 @@
 ## Notes for project:
 
-Nmi = *Neonympha mitchellii mitchellii*
-Nfr = *Neonympha mitchelli francisi*
-Nhe = *Neonympha helicta*
-Nar - *Neonympha areolata*
+- Nmi = *Neonympha mitchellii mitchellii*
+- Nfr = *Neonympha mitchelli francisi*
+- Nhe = *Neonympha helicta*
+- Nar = *Neonympha areolata*
 
 Often there will be a `_NJ` signifying state by two-letter code.
 
@@ -36,4 +36,7 @@ This will run the `docker` image and point the volume to the repo:
 - 2020-01-07: Essentially copied the museum photos into a <kbd>Supplemented</kbd> directory and added the Google Image photos. The museum photos reside in the <kbd>Museum</kbd> directory.
 - 2020-01-20: Added the `imgaug` package to the `docker` image. Also added `Augmentor`.
 - 2020-06-09: Need to work on the image augmentation, especially the color normalization. Fixed the path from `gimage` to `mimage` in the `museum_images.ipynb`.
-- 2020-06-16: Issues with the `ClassConfusion` module through `fastai.widgets`. Trying the hard code and commenting offending lines. 
+- 2020-06-16: Issues with the `ClassConfusion` module through `fastai.widgets`. Trying the hard code and commenting offending lines.
+- 2021-09-30: To create the `R` `docker` image with the appropriate packages:
+    1.
+    2.
