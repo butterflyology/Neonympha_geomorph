@@ -1,0 +1,9 @@
+# Dockerfile to create a reproducible environment to run the `R` based portion of this analysis.
+
+# Import the base image:
+FROM rocker/rstudio
+
+#Install additional packages
+RUN R -e "install.packages(c('geomorph',
+                            'tidyverse',
+                            'MASS'))"
