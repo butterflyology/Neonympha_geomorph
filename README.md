@@ -17,4 +17,7 @@ Major commits:
 1. 2019-11-06: Removing the google images doesn't seem to effect the accuracy of the models.
 1. 2020-01-07: Split the file structure to allow one directory with the museum only images and another with the supplemented images. Added `museum_images.ipynb` to hold the code from the museum image only analysis.
 1. 2020-01-22: Used `Augmentor` package to augment the museum images. 
+1. 2020-01-22: Used `Augmentor` package to augment the museum images.
+1. 2020-06-09: Updated paths for museum images.
+1. 2020-06-16: Having issues with the `ClassConfusion` widget.
 1. 2023-06-21: Back at it. Will update the `fastai` code to `v2`.
