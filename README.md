@@ -21,3 +21,4 @@ Major commits:
 1. 2020-06-09: Updated paths for museum images.
 1. 2020-06-16: Having issues with the `ClassConfusion` widget.
 1. 2023-06-21: Back at it. Will update the `fastai` code to `v2`.
+1. 2023-06-24: Added a `tf` model.

@@ -37,3 +37,4 @@ This will run the `docker` image and point the volume to the repo:
 - 2020-01-20: Added the `imgaug` package to the `docker` image. Also added `Augmentor`.
 - 2020-06-09: Need to work on the image augmentation, especially the color normalization. Fixed the path from `gimage` to `mimage` in the `museum_images.ipynb`.
 - 2020-06-16: Issues with the `ClassConfusion` module through `fastai.widgets`. Trying the hard code and commenting offending lines. 
+- 2023-06-24: Added `tf` model and tried visualizing the important layers. Needs a lot of work.
