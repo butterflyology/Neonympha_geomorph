@@ -111,7 +111,14 @@ Pattern_lda <- lda(as.matrix(Pattern_pca_shape[, 3:50]), Pattern_pca_shape$Taxon
 Pattern_lda_scores <- as.matrix(Pattern_pca_shape[, 3:50]) %*% as.matrix(Pattern_lda$scaling) # Here we use matrix multiplication to multiply the Pattern pcs by the lda scaling. This gives us LDA positions for each individual.
 Pattern_pca_lda <- cbind(Pattern_pca_shape, Pattern_lda_scores)
 
-plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Pattern_pca_lda$Taxon], pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD 2 (15.5%)', xlim =c(-5, 6), ylim = c(-4.5, 4), cex = 2, las = 1 ) # % of variance explained at bottom of output when calling Pattern_lda
+taxon_colors <- c("N.ar" = SW_palette("Main")[1], "N.he" = SW_palette("ROTJ")[3], "N.fr" = SW_palette("Inquisitor")[1], "N.mi" = SW_palette("TESB")[8])
+
+plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2,
+     col = taxon_colors[Pattern_pca_lda$Taxon],
+     pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD2 (15.5%)',
+     xlim = c(-5, 6), ylim = c(-4.5, 4),
+     cex = 2, las = 1) # % of variance explained at bottom of output when calling Pattern_lda
+
 legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 
 
@@ -126,7 +133,6 @@ Structure_lda <- lda(as.matrix(Structure_pca_shape[, 3:28]), Structure_pca_shape
 Structure_lda_scores <- as.matrix(Structure_pca_shape[, 3:28]) %*% as.matrix(Structure_lda$scaling)
 Structure_pca_lda <- cbind(Structure_pca_shape, Structure_lda_scores)
 
-taxon_colors <- c("N.ar" = SW_palette("Main")[1], "N.he" = SW_palette("ROTJ")[3], "N.fr" = SW_palette("Inquisitor")[1], "N.mi" = SW_palette("TESB")[8])
 plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2,
      col = taxon_colors[Structure_pca_lda$Taxon],
      pch = 19, xlab= 'LD1 (74.7%)', ylab ='LD2 (1.5%)',
@@ -151,7 +157,8 @@ Cov_ALW_lda_scores <- as.matrix(Cov_ALW_shape[, 3:14]) %*% as.matrix(Cov_ALW_lda
 
 Cov_ALW_pca_lda <- cbind(Cov_ALW_shape, Cov_ALW_lda_scores)
 
-plot(Cov_ALW_pca_lda$LD1, Cov_ALW_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Cov_ALW_pca_lda$Taxon], xlim= c(-4.5, 4), ylim = c(-4, 4),pch = 19, xlab= "LD1 (83.8%)", ylab ="LD 2 (12.8%)", cex = 2, las = 1 )
+plot(Cov_ALW_pca_lda$LD1, Cov_ALW_pca_lda$LD2, col = taxon_colors[Cov_ALW_pca_lda$Taxon], xlim= c(-4.5, 4), ylim = c(-4, 4),pch = 19, xlab= "LD1 (83.8%)", ylab ="LD 2 (12.8%)", cex = 2, las = 1 )
+
 legend('topleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 
 
@@ -360,7 +367,7 @@ summary(clm_2_pw, test.type = "dist", confidence = 0.95)
 # Need to do calculate the mean shape for each taxon
 Pp <- dim(Pattern_gpa$coords)[1]
 Pk <- dim(Pattern_gpa$coords)[2]
-P_group <- as.factor(Combined_data$Taxon)
+P_group <- factor(Combined_data$Taxon)
 PY <- array(NA, dim = c(Pp, Pk, length(levels(P_group))))
 dimnames(PY)[[3]] <- levels(P_group)
 
@@ -379,8 +386,11 @@ Nfr_PY <- PY[, , 2]
 Nmi_PY <- PY[, , 4]
 
 
-
-plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Pattern_pca_lda$Taxon], pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD 2 (15.5%)', xlim =c(-5, 7), ylim = c(-5, 5), cex = 2, las = 1 )
+plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2,
+     col = taxon_colors[Pattern_pca_lda$Taxon],
+     pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD2 (15.5%)',
+     xlim = c(-5, 6), ylim = c(-4.5, 4),
+     cex = 2, las = 1)
 
 # Warp grid for N. areolata
 par(fig = c(0.08, 0.28, 0.58, 0.93), new = TRUE)
@@ -390,14 +400,15 @@ N_ar_pars <- gridPar(tar.pt.bg = SW_palette("Main")[1], tar.pt.size = 1.5)
 plotRefToTarget(P_reference, Nar_PY, method = "TPS", mag = 3, gridPars = N_ar_pars)
 
 # Warp grid for N. helicta
-par(fig = c(0.08, 0.28, 0.1, 0.45), new = TRUE)
+par(fig = c(0.76, 0.96, 0.1, 0.45), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 N_he_pars <- gridPar(tar.pt.bg = SW_palette("Inquisitor")[1], tar.pt.size = 1.5)
 plotRefToTarget(P_reference, Nhe_PY, method = "TPS", mag = 3, gridPars = N_he_pars)
 
 # Warp grid for N. m. francisi
-par(fig = c(0.76, 0.96, 0.1, 0.45), new = TRUE)
+
+par(fig = c(0.08, 0.28, 0.1, 0.45), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 N_fr_pars <- gridPar(tar.pt.bg = SW_palette("ROTJ")[3], tar.pt.size = 1.5)
@@ -416,7 +427,7 @@ dev.off()
 ### Structure
 Sp <- dim(Structure_gpa$coords)[1]
 Sk <- dim(Structure_gpa$coords)[2]
-S_group <- Combined_data$Taxon
+S_group <- factor(Combined_data$Taxon)
 SY <- array(NA, dim = c(Sp, Sk, length(levels(S_group))))
 dimnames(SY)[[3]] <- levels(S_group)
 
@@ -434,22 +445,27 @@ Nhe_SY <- SY[, , 3]
 Nfr_SY <- SY[, , 2]
 Nmi_SY <- SY[, , 4]
 
-plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Structure_pca_lda$Taxon], pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD 2 (15.5%)', xlim =c(-5, 7), ylim = c(-5, 5), cex = 2, las = 1 )
+# par(mfrow=c(1, 1))
+plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2,
+     col = taxon_colors[Structure_pca_lda$Taxon],
+     pch = 19, xlab= 'LD1 (74.7%)', ylab ='LD2 (1.5%)',
+     xlim = c(-5, 6), ylim = c(-4.5, 4),
+     cex = 2, las = 1)
 
 # Warp grid for N. areolata
-par(fig = c(0.08, 0.28, 0.55, 0.9), new = TRUE)
+par(fig = c(0.08, 0.28, 0.15, 0.5), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 plotRefToTarget(S_reference, Nar_SY, method = "TPS", mag = 3, gridPars = N_ar_pars)
-
+#
 # Warp grid for N. helicta
-par(fig = c(0.08, 0.28, 0.15, 0.5), new = TRUE)
+par(fig = c(0.76, 0.96, 0.15, 0.5), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 plotRefToTarget(S_reference, Nhe_SY, method = "TPS", mag = 3, gridPars = N_he_pars)
 
 # Warp grid for N. m. francisi
-par(fig = c(0.76, 0.96, 0.15, 0.5), new = TRUE)
+par(fig = c(0.08, 0.28, 0.55, 0.9), new = TRUE)
 plot.new()
 par(mar = c(1, 1, 1, 1))
 plotRefToTarget(S_reference, Nfr_SY, method = "TPS", mag = 3, gridPars = N_fr_pars)
