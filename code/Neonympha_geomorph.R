@@ -126,7 +126,13 @@ Structure_lda <- lda(as.matrix(Structure_pca_shape[, 3:28]), Structure_pca_shape
 Structure_lda_scores <- as.matrix(Structure_pca_shape[, 3:28]) %*% as.matrix(Structure_lda$scaling)
 Structure_pca_lda <- cbind(Structure_pca_shape, Structure_lda_scores)
 
-plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Structure_pca_lda$Taxon], pch = 19, xlab= 'LD1 (74.7%)', ylab ='LD 2 (1.5%)', xlim =c(-5, 6), ylim = c(-4.5, 4), cex = 2, las = 1 )
+taxon_colors <- c("N.ar" = SW_palette("Main")[1], "N.he" = SW_palette("ROTJ")[3], "N.fr" = SW_palette("Inquisitor")[1], "N.mi" = SW_palette("TESB")[8])
+plot(Structure_pca_lda$LD1, Structure_pca_lda$LD2,
+     col = taxon_colors[Structure_pca_lda$Taxon],
+     pch = 19, xlab= 'LD1 (74.7%)', ylab ='LD2 (1.5%)',
+     xlim = c(-5, 6), ylim = c(-4.5, 4),
+     cex = 2, las = 1)
+
 legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expression(paste(italic('N. helicta'))), expression(paste(italic('N. m. fransisci'))), expression(paste(italic('N. m. mitchellii')))), bty = 'n', pch = 19, col = c(SW_palette("Main")[1], SW_palette("Inquisitor")[1], SW_palette("ROTJ")[3], SW_palette("TESB")[8]), pt.cex = 2)
 
 
@@ -354,7 +360,7 @@ summary(clm_2_pw, test.type = "dist", confidence = 0.95)
 # Need to do calculate the mean shape for each taxon
 Pp <- dim(Pattern_gpa$coords)[1]
 Pk <- dim(Pattern_gpa$coords)[2]
-P_group <- Combined_data$Taxon
+P_group <- as.factor(Combined_data$Taxon)
 PY <- array(NA, dim = c(Pp, Pk, length(levels(P_group))))
 dimnames(PY)[[3]] <- levels(P_group)
 
@@ -371,6 +377,8 @@ Nar_PY <- PY[, , 1]
 Nhe_PY <- PY[, , 3]
 Nfr_PY <- PY[, , 2]
 Nmi_PY <- PY[, , 4]
+
+
 
 plot(Pattern_pca_lda$LD1, Pattern_pca_lda$LD2, col = c(SW_palette("Main")[1], SW_palette("ROTJ")[3], SW_palette("Inquisitor")[1], SW_palette("TESB")[8])[Pattern_pca_lda$Taxon], pch = 19, xlab= 'LD1 (75.5%)', ylab ='LD 2 (15.5%)', xlim =c(-5, 7), ylim = c(-5, 5), cex = 2, las = 1 )
 
