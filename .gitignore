@@ -3,4 +3,4 @@
 .ipynb_checkpoints/
 *.Rproj
 models/
-
+data/images/augmented_train_test_validate/
