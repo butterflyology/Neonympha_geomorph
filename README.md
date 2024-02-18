@@ -22,4 +22,5 @@ Major commits:
 1. 2020-06-16: Having issues with the `ClassConfusion` widget.
 1. 2023-06-21: Back at it. Will update the `fastai` code to `v2`.
 1. 2023-06-24: Added a `tf` model.
-1. 2024-02-17: Fixed the `R` code that broke the plots. Started on the updated `fastai` but that isn't working on a Mac so I will try another RNN approach that is standalone. 
+1. 2024-02-17: Fixed the `R` code that broke the plots. Started on the updated `fastai` but that isn't working on a Mac so I will try another RNN approach that is standalone.
+1. 2024-02-18: Simple `torchvision` based model is done and it works suprisingly well. 
