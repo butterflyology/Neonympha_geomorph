@@ -24,3 +24,4 @@ Major commits:
 1. 2023-06-24: Added a `tf` model.
 1. 2024-02-17: Fixed the `R` code that broke the plots. Started on the updated `fastai` but that isn't working on a Mac so I will try another RNN approach that is standalone.
 1. 2024-02-18: Simple `torchvision` based model is done and it works suprisingly well. Added "augmented" images and ran on same model. I am surprised but the augmentation made it perform worse. Maybe because of the small size of the images?
+1. 2024-02-23: Added investigation of allometry between wing pattern and BO size/shape. Now linear relationship evident. Trying fourier with momocs but damn is it dumb. Can someone just write a tutorial with how to get data into the format you need for analysis?

@@ -143,7 +143,7 @@ legend('bottomleft', legend = c(expression(paste(italic('N. areolatus'))), expre
 
 
 ### Covariate
-# Not all individuals have border ocelli in cells 1 and 2, so we will omit those from this analysis. We will select the area, lenght and width of border ocelli from cells 3:6.
+# Not all individuals have border ocelli in cells 1 and 2, so we will omit those from this analysis. We will select the area, length and width of border ocelli from cells 3:6.
 
 Cov_ALW <- Combined_data[, c(87:90, 95:102)]
 Cov_ALW_pca <- prcomp(Cov_ALW)
@@ -477,3 +477,23 @@ par(mar = c(1, 1, 1, 1))
 plotRefToTarget(S_reference, Nmi_SY, method = "TPS", mag = 3, gridPars = N_mi_pars)
 
 dev.off()
+
+
+# More lm ----
+# How is wing pattern influenced by ocelli characteristics?
+
+ocelli_subset <- as.data.frame(Combined_data[, c(87:90, 95:102)])
+
+allometry_model <- procD.lm(Pattern_gpa$coords ~ BO3 + BO4 + BO5 + BO6 + B3L + B3W + B4L + B4W + B5L + +B5W + B6L + B6W, data = ocelli_subset)
+summary(allometry_model)
+
+nrow(Pattern_gpa$coords) # Number of shape observations
+nrow(ocelli_subset)      # Number of model observations
+
+plotAllometry(allometry_model, size = Pattern_gpa$Csize, label = TRUE, las = 1, pch = 19., col = rgb(0, 0, 0, 0.5), cex = 1.5, xlab = "Predictor", ylab = "PC1") 
+# The cloud-like distribution without a clear trend might suggest that the relationship between the predictor and PC1 is not linear, or it might suggest a weak relationship or high variability that is not captured by a linear model.
+
+# plot the residuals of the model against the predictor to check for any patterns that might suggest a violation of model assumptions. This is a bit much and not needed. Going down the rabbit hole too much. 
+allo_resids <- resid(allometry_model)
+summary(allo_resids)
+str(allo_resids)
